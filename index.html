@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Battleship</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+
+      font-family: 'Arial', sans-serif;
+    }
+    .page--overlay::after {
+      content: "";
+      top: 0;
+      left: 0;
+      position: fixed;
+      display: block;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(200, 10, 180, 0.4);
+      z-index: 11;
+    }
+    .batlleship-container {
+      position: relative;
+      width: 870px;/*81024px; --85%*/
+      height: 734px;/*863px;*/
+      margin: 0 auto;
+      /*padding-top: 98px;*/
+
+      color: #ffffff;
+
+      background-color: #000000;
+      background-image: url("img/board.jpg");
+      background-size: contain;
+    }
+    .batlleship-container__table {
+      position: absolute;
+      top: 83.3px;
+      left: 16.8%;/*173px*/
+      border-spacing: 0;
+      width: ;
+      height: ;
+      margin: 0 auto;
+
+      border-collapse: collapse;
+    }
+    .battleship-field__unit {
+      position: relative;
+
+      width: 79.9px;
+      height: 79.9px;
+      
+      background-color: rgba(200, 10, 180, 0.4)
+    }
+    .battleship-field__unit--test {
+      background-repeat: no-repeat;
+      background-position: center;
+      background-image: url("img/ship.png");
+      background-size: 30%;
+     }
+    .battleship-field__unit--hit {
+      background-repeat: no-repeat;
+      background-position: center;
+      background-image: url("img/ship.png");
+      background-size: 90%;
+     }
+    .battleship-field__unit--hit-all {
+      background-image: url("img/ship-red.png");
+    }
+     .battleship-field__unit--missed {
+      background-repeat: no-repeat;
+      background-position: center;
+      background-image: url("img/miss.png");
+      background-size: 90%;
+     }
+    .batlleship-container__message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .battleship-message {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 250px;
+      min-height: 100px;
+      padding: 15px;
+
+      font-size: 32px;
+      line-height: 1.4;
+      text-align: center;
+
+      z-index: 12;
+
+      background-color: rgba(23, 175, 49, 1);
+    }
+    .batlleship-message--hidden {
+      display: none;
+    }
+    .batlleship-container__form {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+    .battleship-form {
+      padding: 10px;
+
+      background-color: rgba(83, 175, 19, 0.7);
+    }
+    .battleship-form__input {
+      margin: 0 10px 0 0;
+      padding: 5px;
+
+      font-size: 14px;
+      text-transform: uppercase;
+
+      border: none;
+    }
+    .battleship-form__button {
+      padding: 5px;
+
+      font-size: 14px;
+      color: rgb(83, 175, 19);
+
+      border: none;
+    }
+    .battleship-form__button:focus,
+    .battleship-form__button:hover {
+      color: rgb(63, 155, 0);
+
+      box-shadow: 0 0  10px green;
+      background-color: rgb(203, 255, 120);
+    }
+/*    .hit {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+
+      display: block;
+      width: 85%;
+      height: auto;
+      margin: 0 auto;
+
+      transform: translate(-50%, -50%); 
+    }
+  */
+    .battleship-message__button {
+      padding: 15px;
+      background-color: #ffffff;
+      color: rgb(183, 235, 100);
+      font-size: 25px;
+      border-radius: 4px;
+    }
+    .battleship-message__button:hover,
+    .battleship-message__button:focus {
+      background-color: rgba(200, 200, 200, 1);
+      color: rgb(183, 235, 100);
+    }
+    
+    .battleship-message__button:active {
+      background-color: rgba(255, 255, 255);
+      color: rgb(123, 175, 40);
+    }
+    .battleship-form__input--mistake {
+      color: red;
+    }
+  </style>
+</head>
+<body class="page">
+  <section id="board" class="batlleship-container">
+    <div id="messageArea" class="batlleship-container__message   battleship-message  batlleship-message--hidden">
+      <p>You sank my battleship!</p>
+      <button id="closeResultMessage" class="battleship-message__button" type="button">Play again</button>
+    </div>
+    <table class="batlleship-container__table  battleship-field">
+      <tr>
+        <!--<th>A</th>-->
+      	<td id="00" class="battleship-field__unit" tabindex="0">
+     <!--	<img class="hit hit- -missed" src="img/miss.png" alt="Miss/Get" width="79" height="33">-->
+      	</td>
+      	<td id="01" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="02" class="battleship-field__unit" tabindex="0">
+     <!--	<img class="hit hit- -got" src="img/ship.png" alt="Miss/Get" width="90" height="23"> -->
+      	</td>
+      	<td id="03" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="04" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="05" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="06" class="battleship-field__unit" tabindex="0"></td>
+      </tr>
+      <tr>
+      	<td id="10" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="11" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="12" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="13" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="14" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="15" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="16" class="battleship-field__unit" tabindex="0"></td>
+      </tr>
+      <tr>
+      	<td id="20" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="21" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="22" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="23" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="24" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="25" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="26" class="battleship-field__unit" tabindex="0"></td>
+      </tr>
+      <tr>
+      	<td id="30" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="31" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="32" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="33" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="34" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="35" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="36" class="battleship-field__unit" tabindex="0"></td>
+      </tr>
+      <tr>
+      	<td id="40" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="41" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="42" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="43" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="44" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="45" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="46" class="battleship-field__unit" tabindex="0"></td>
+      </tr>
+      <tr>
+      	<td id="50" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="51" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="52" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="53" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="54" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="55" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="56" class="battleship-field__unit" tabindex="0"></td>
+      </tr>
+      <tr>
+      	<td id="60" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="61" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="62" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="63" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="64" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="65" class="battleship-field__unit" tabindex="0"></td>
+      	<td id="66" class="battleship-field__unit" tabindex="0"></td>
+      </tr>
+    </table>
+    <form class="batlleship-container__form  battleship-form" action="" method="post">
+      <input class="battleship-form__input" id="guess-input" name="guess-input" type="text" placeholder="A0">
+      <button class="battleship-form__button" id="fire-button" type="button">Fire!</button><!--type=button||evt.preventDefault()-->
+    </form><!--атрибут action в элементе <form> не нужен, потому что мы не отправляем форму приложению на стороне сервера. В нашей игре все происходящее обрабаты- вается в браузере на программном уровне. Вместо отправки формы мы реализуем обработчик события, который оповещается о нажатии кнопки, и когда это происходит, мы обрабатываем в коде все, включая получение данных от пользователя. type of button "button"!-->
+  </section>
+
+ <!-- <script src="battleship_gameprocess_ArrayInput_Lettercheck.js"></script>-->
+ <script src="battleship_gameprocess_InputEnter.js"></script>
+</body>
+</html>
+<!--functions randomfill should work with other combo of rows and columns, DONE
+    rows and columns to give as Array where position will help again
+    html is built by js -> but there is a default meaning and responsive graphics (a, b -> th text stylized)
+    -> graphics is adjusted too! CANVAS?? !!I think just CSS and JS and HTML
+    pointer is a target
+    advanced: person vs computer on 2 boards!!
+    to set up connection between LETTERS and ROW NUMBERS !!!!!!!
+    input value besides clicking
+    Popup about results 
+   W Popup with Play again/Try again
+    Keep record of steps
+    Resplace bg-images with imgs (svgs) + alt text. 
+    READ about svg a11y and table a11y (pig article, Webaim)
+   W MAKE the opened unit UNCLICKABLE
+
+    addEventListener FOR KEYS too!!
+
+    Weak point: overlay under the Popup - why class is not working, but pseudo-element works! i think i know why: there should
+    be a separate element that is layed over elements. It could be done with отдельным див'ом.
+-->
+
+<!--
+bg-images -> images AS CONCERN OF A11Y! alt??
+autofocus in the INPUT FIELD
+W input
+info table "HOW many ships are done and which and HOW many and which are left"
+W input if somebody types SPACE!! it should not cause mistake AND too big number
+W a1 - 01
+escape is added to window event but how play again? ADD A BUTTON Play again
+W add addEventListener for KEYS
+W input of [rows, columns]
+keyboardnavigation by <- -> up down https://stackoverrun.com/ru/q/10184791
+welcome popup with flexible info of ship number and decks
+pointer is a target (customized)
+pointer is set while typing the position of guess (shot) аля прицел
+READ about svg a11y and table a11y (pig article, Webaim) https://tink.uk/accessible-svg-tables/ + webaim + свинка https://davatron5000.github.io/a11y-nutrition-cards/
+-->
